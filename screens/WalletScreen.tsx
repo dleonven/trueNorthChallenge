@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Context } from './Context'
 
 
 const Tab = createBottomTabNavigator();
@@ -24,10 +24,14 @@ export default function WalletScreen() {
 }
 
 function AccountSection() {
+
+    const { name } = useContext(Context)
+
+
     return (
         <View style={styles.container}>
             <Image style={styles.illustration} source={require('../assets/finish-illustration.png')} />
-            <Text style={styles.title}>Hello, $contextName</Text>
+            <Text style={styles.title}>Hello, {name}</Text>
             <Text>Glad you are here,</Text>
             <Text>hope to see you soon.</Text>
         </View>

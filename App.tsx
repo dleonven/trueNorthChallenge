@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -9,27 +9,38 @@ import DetailScreen from './screens/DetailScreen';
 import WalletScreen from './screens/WalletScreen';
 import Logo from './components/ui/Logo'
 import { stackScreenList } from './globalTypes'
-
+import { Context } from './screens/Context'
 const Stack = createStackNavigator<stackScreenList>();
 
+
+
 function App() {
+
+    const [name, setName] = useState<string>('')
+
+
+    const valueForContext = { name, setName }
+
     return (
-        <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name="ToDo" component={ToDoScreen} />
-                <Stack.Screen 
-                    name="Home" 
-                    component={HomeScreen} 
-                    options={{
-                        headerTitle: () => <Logo/>,
-                    }}
-                />
-                <Stack.Screen name="List" component={ListScreen} />
-                <Stack.Screen name="Detail" component={DetailScreen} />
-                <Stack.Screen name="Wallet" component={WalletScreen} />
-            </Stack.Navigator>
-            <StatusBar />
-        </NavigationContainer>
+        <Context.Provider value={valueForContext}>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen name="ToDo" component={ToDoScreen} />
+                    <Stack.Screen 
+                        name="Home" 
+                        component={HomeScreen} 
+                        options={{
+                            headerTitle: () => <Logo/>,
+                        }}
+                    />
+                    <Stack.Screen name="List" component={ListScreen} />
+                    <Stack.Screen name="Detail" component={DetailScreen} />
+                    <Stack.Screen name="Wallet" component={WalletScreen} />
+                </Stack.Navigator>
+                <StatusBar />
+            </NavigationContainer>
+        </Context.Provider>
+
     );
 }
 
