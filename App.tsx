@@ -7,31 +7,33 @@ import HomeScreen from './screens/HomeScreen';
 import ListScreen from './screens/ListScreen';
 import DetailScreen from './screens/DetailScreen';
 import WalletScreen from './screens/WalletScreen';
+import Logo from './components/ui/Logo'
+import { stackScreenList } from './globalTypes'
 
-/**
- * Use `HomeScreen` as the initial route
- * Replace the screen title with the `Logo` component
- *
- * 💯  Usage of TypeScript is a plus
- */
+const Stack = createStackNavigator<stackScreenList>();
 
-// import Logo from './components/ui/Logo';
 
-const Stack = createStackNavigator();
 
 function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="ToDo" component={ToDoScreen} />
-        <Stack.Screen name="List" component={ListScreen} />
-        <Stack.Screen name="Detail" component={DetailScreen} />
-        <Stack.Screen name="Wallet" component={WalletScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-      <StatusBar />
-    </NavigationContainer>
-  );
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen name="ToDo" component={ToDoScreen} />
+                <Stack.Screen 
+                    name="Home" 
+                    component={HomeScreen} 
+                    options={{
+                        headerTitle: () => <Logo/>,
+                    }}
+                />
+                <Stack.Screen name="List" component={ListScreen} />
+                <Stack.Screen name="Detail" component={DetailScreen} />
+                <Stack.Screen name="Wallet" component={WalletScreen} />
+            </Stack.Navigator>
+            <StatusBar />
+        </NavigationContainer>
+    );
 }
 
 export default App;
+

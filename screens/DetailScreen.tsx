@@ -1,43 +1,56 @@
-import React from 'react';
-import {Alert, StyleSheet, Text, View, Button} from 'react-native';
-
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Button} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { item, appScreens } from '../globalTypes'
 /**
- * ToDo: Feed the list using fetching data from a RESTful API
- *
- * API: COINCAP API 2.0
- * API Docs: https://api.coincap.io/v2/assets/{id}
- * API Example: https://docs.coincap.io/#f8869879-171f-4240-adfd-dd2947506adc
- *
- * 💯 Using axios great plus
  * 💯 Handle loading and error scenarios, always
- */
+*/
 
-export default function ListScreen() {
-  /* ToDo: Get the id param from the route */
-  const id = 'bitcoin';
-  const item = mockData.data;
+export default function ListScreen({ route }) {
+    const navigation = useNavigation<appScreens>()
 
-  return (
-    <View style={styles.container}>
-      {item ? (
-        <View>
-          <Text>itemId: {JSON.stringify(id)}</Text>
-          <Text>#{item.rank}</Text>
-          <Text>{item.symbol}</Text>
-          <Text>{item.name}</Text>
-          <Text>USD {item.priceUsd}</Text>
-          <Text>Last24 {item.changePercent24Hr}</Text>
-          <Text>Supply {item.supply}</Text>
-          <Text>Max Supply {item.maxSupply}</Text>
-          <Text>Market Cap Usd {item.marketCapUsd}</Text>
+    const { id } = route.params
 
-          <Button title="My Wallet" onPress={() => Alert.alert('Wallet')} />
+    const [item, setItem] = useState<item>(null)
+
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const response = await axios.get(`https://api.coincap.io/v2/assets/${id}`)
+                setItem(response.data.data)
+            } 
+            catch (error) {
+                console.log('error: ', error)
+            }
+        }
+
+        getData()
+    }, [])
+
+    const onPress = () => navigation.navigate('Wallet')
+
+    return (
+        <View style={styles.container}>
+            {item ?
+                <View>
+                    <Text>itemId: {JSON.stringify(id)}</Text>
+                    <Text>#{item.rank}</Text>
+                    <Text>{item.symbol}</Text>
+                    <Text>{item.name}</Text>
+                    <Text>USD {item.priceUsd}</Text>
+                    <Text>Last24 {item.changePercent24Hr}</Text>
+                    <Text>Supply {item.supply}</Text>
+                    <Text>Max Supply {item.maxSupply}</Text>
+                    <Text>Market Cap Usd {item.marketCapUsd}</Text>
+
+                    <Button title="My Wallet" onPress={onPress} />
+                </View>
+                : 
+                <Text>Loading</Text>
+            }
         </View>
-      ) : (
-        <Text>Loading</Text>
-      )}
-    </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({

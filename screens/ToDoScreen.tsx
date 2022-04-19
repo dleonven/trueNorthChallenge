@@ -1,23 +1,29 @@
 import React from 'react';
 import {Alert, StyleSheet, Text, View, Image, Button} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScreen() {
-  return (
-    <View style={styles.container}>
-      <Image
-        style={styles.illustration}
-        source={require('../assets/home-illustration.png')}
-      />
-      <Text style={styles.title}>Howdy partner!</Text>
-      <Text>This is your assignment.</Text>
-      <Text>Follow the instructions on the Readme file.</Text>
-      <Text>
-        Don’t worry, it’s easy! You should have the app looking smooth in no
-        time.
-      </Text>
-      <Button title="Start Here" onPress={() => Alert.alert('Home')} />
-    </View>
-  );
+
+    const navigation = useNavigation()
+
+    const onPress = () => navigation.navigate('Home')
+
+    return (
+        <View style={styles.container}>
+            <Image
+                style={styles.illustration}
+                source={require('../assets/home-illustration.png')}
+            />
+            <Text style={styles.title}>Howdy partner!</Text>
+            <Text>This is your assignment.</Text>
+            <Text>Follow the instructions on the Readme file.</Text>
+            <Text>
+            Don’t worry, it’s easy! You should have the app looking smooth in no
+            time.
+            </Text>
+            <Button title="Start Here" onPress={onPress} />
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
