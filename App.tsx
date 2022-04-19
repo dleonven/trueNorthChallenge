@@ -12,8 +12,6 @@ import { stackScreenList } from './globalTypes'
 
 const Stack = createStackNavigator<stackScreenList>();
 
-
-
 function App() {
     return (
         <NavigationContainer>
