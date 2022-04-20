@@ -8,7 +8,6 @@ const Tab = createBottomTabNavigator();
 
 
 /**
- * ToDo: In the Account tab, print the name submited in the Sign-In form
  * ToDo: In the Partners tab, manually list some apps you create
  *
  * 💯 Published apps where you been involved is great plus

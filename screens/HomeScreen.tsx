@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
-import {Alert, StyleSheet, Text, TextInput, View, Button} from 'react-native';
+import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { appScreens } from '../globalTypes'
 import { Context } from './Context'
+import globalstyles from "../globalStyles"
 
 /*
   Implement form using any user/pass combination
@@ -11,7 +12,7 @@ import { Context } from './Context'
 */
 export default function HomeScreen() {
 
-    const { setName } = useContext(Context)
+    const { name, setName } = useContext(Context)
 
     const navigation = useNavigation<appScreens>()
 
@@ -20,35 +21,56 @@ export default function HomeScreen() {
     const [password, setPassword] = useState<string>('')
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Welcome</Text>
-            <Text />
-            <TextInput 
-                style={{height: 40}} 
-                placeholder="Enter your name" 
-                onChangeText={setName}
-            />
-            <TextInput 
-                style={{height: 40}} 
-                placeholder="Enter your passowrd" 
-                onChangeText={setPassword}
-            />
-            <Button title="Sign in" onPress={onPress} />
+        <View style={globalstyles.container}>
+            <Text style={globalstyles.title}>Welcome</Text>
+            
+            <View style={{marginTop: 44}} />
+
+            <View style={styles.input}>
+                <TextInput 
+                    value={name}
+                    style={styles.inputText} 
+                    placeholder="Enter your name" 
+                    placeholderTextColor={'#6B7280'}
+                    onChangeText={setName}
+                />            
+            </View>
+
+            <View style={{marginTop: 16}}/>
+
+            <View style={styles.input}>
+                <TextInput 
+                    style={styles.inputText} 
+                    placeholder="Enter your passowrd" 
+                    placeholderTextColor={'#6B7280'}
+                    onChangeText={setPassword}
+                    secureTextEntry={true}
+                />
+            </View>
+
+            <View style={{marginTop: 44}} />
+
+            <Pressable onPress={onPress} style={({ pressed }) => ([globalstyles.button, pressed && { opacity: 0.6 }])}>
+                <Text style={globalstyles.buttonText}>Sign in</Text>
+            </Pressable>
         </View>
     );
 }
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 12,
-  },
+    input: {
+        width: '100%',
+        height: 42,
+        borderColor: '#D1D5DB',
+        borderWidth: 1,
+        borderRadius: 6,
+        justifyContent: 'center',
+        paddingLeft: 13
+    },
+    inputText: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 16,
+        color: '#6B7280'
+    }
 });

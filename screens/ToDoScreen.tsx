@@ -1,45 +1,52 @@
 import React from 'react';
-import {Alert, StyleSheet, Text, View, Image, Button} from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { appScreens } from '../globalTypes'
+import globalstyles from "../globalStyles"
 
 export default function HomeScreen() {
 
-    const navigation = useNavigation()
+    const navigation = useNavigation<appScreens>()
 
     const onPress = () => navigation.navigate('Home')
 
     return (
-        <View style={styles.container}>
+        <View style={globalstyles.container}>
             <Image
                 style={styles.illustration}
                 source={require('../assets/home-illustration.png')}
             />
-            <Text style={styles.title}>Howdy partner!</Text>
-            <Text>This is your assignment.</Text>
-            <Text>Follow the instructions on the Readme file.</Text>
-            <Text>
-            Don’t worry, it’s easy! You should have the app looking smooth in no
-            time.
-            </Text>
-            <Button title="Start Here" onPress={onPress} />
+
+            <View style={{marginTop: 24}} />
+
+            <Text style={globalstyles.title}>Howdy partner!</Text>
+
+            <View style={{marginTop: 24}} />
+
+            <>
+                <Text style={globalstyles.infoText}>This is your assignment.</Text>
+                <Text style={globalstyles.infoText}>Follow the instructions on the Readme file.</Text>
+                
+                <View style={{marginTop: 16}} />
+
+                <Text style={globalstyles.infoText}>
+                    Don’t worry, it’s easy! You should have the app looking smooth in no
+                    time.
+                </Text>
+            </>
+
+            <View style={{marginTop: 44}} />
+
+            <Pressable onPress={onPress} style={({ pressed }) => ([globalstyles.button, pressed && { opacity: 0.6 }])}>
+                <Text style={globalstyles.buttonText}>Start Here</Text>
+            </Pressable>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  illustration: {
-    width: 256,
-    height: 256,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 12,
-  },
+    illustration: {
+        width: 206,
+        height: 194,
+    }
 });

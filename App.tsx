@@ -18,14 +18,23 @@ function App() {
 
     const [name, setName] = useState<string>('')
 
-
     const valueForContext = { name, setName }
 
     return (
         <Context.Provider value={valueForContext}>
             <NavigationContainer>
                 <Stack.Navigator>
-                    <Stack.Screen name="ToDo" component={ToDoScreen} />
+                    <Stack.Screen 
+                        name="ToDo" 
+                        component={ToDoScreen} 
+                        options={{
+                            title: 'To Do',
+                            headerTitleStyle: {
+                                fontFamily: 'Inter-SemiBold',
+                                fontSize: 16
+                            },
+                        }}
+                    />
                     <Stack.Screen 
                         name="Home" 
                         component={HomeScreen} 

@@ -9,6 +9,14 @@ import {
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { item, appScreens } from '../globalTypes'
+import globalstyles from "../globalStyles"
+
+
+const amountFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+});
 
 /*
  * 💯 Handle loading and error scenarios, always
@@ -43,18 +51,27 @@ export default function ListScreen() {
     const ListItem = (props: {item: item}) => {
         return (
             <View style={styles.itemContainer}>
-                {/* ToDo: Link to `DetailScreen` passing `id` as parameter */}
                 <TouchableWithoutFeedback onPress={() => onPressItem(props.item)}>
                     <View>
-                        <View>
-                            <Text>{props.item?.symbol}</Text>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <View style={styles.cryptoContainer}>
+                                <Text style={styles.ticker}>{props.item?.symbol}</Text>
+                                <Text> - </Text>
+                                <Text>{props.item?.name}</Text>
+                            </View>
+
                             <Text>#{props.item?.rank}</Text>
                         </View>
-                        <View>
-                            <Text>{props.item?.name}</Text>
-                            {/* 💯  In this execercise you can round numbers without a library */}
-                            <Text>USD {props.item?.priceUsd}</Text>
-                            <Text>Last24 {props.item?.changePercent24Hr}</Text>
+
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <View style={{flexDirection: 'row'}}>
+                                <Text style={styles.price}>{amountFormatter.format(parseFloat(props.item?.priceUsd))}</Text>
+                                <Text style={styles.currency}> USD</Text>
+                            </View>
+                            
+                            <View style={styles.percentageContainer}>
+                                <Text>{Number(parseFloat(props.item?.changePercent24Hr)/100).toLocaleString(undefined,{style: 'percent', minimumFractionDigits:1})}</Text>
+                            </View>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
@@ -63,7 +80,7 @@ export default function ListScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <>
             {data && data.length > 0 ?
                 <ScrollView>
                     {data.map((item: item) => (
@@ -76,24 +93,55 @@ export default function ListScreen() {
                 : 
                 <Text>Loading</Text>
             }
-        </View>
+        </>
     );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    margin: 8,
-  },
-  illustration: {
-    width: 50,
-    height: 50,
-  },
-  itemContainer: {
-    display: 'flex',
-    backgroundColor: '#fff',
-    marginVertical: 6,
-    padding: 8,
-  },
+    container: {
+        flex: 1,
+    },
+    itemContainer: {
+        width: '100%',
+        paddingLeft: 16,
+        padingRight: 18,
+        paddingTop: 20,
+        paddingBottom: 18,
+        backgroundColor: '#fff',
+    },
+    cryptoContainer: {
+        flexDirection: 'row', 
+        alignItems: 'center'
+    },
+    ticker: {
+        fontFamily: 'Inter-Bold',
+        fontSize: 16
+    },
+    name: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 16 
+    },
+    rank: {
+        fontFamily: 'Inter-Medium',
+        fontSize: 14,
+        color: '#6B7280'   
+    },
+    price: {
+        fontFamily: 'Inter-SemiBold',
+        fontSize: 24,
+        color: '#019FB5'    
+    },
+    currency: {
+        fontFamily: 'Inter-Medium',
+        fontSize: 14,
+        color: '#6B7280',
+    },
+    percentageContainer: {
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 12,
+        width: 73
+    }
 });
 
