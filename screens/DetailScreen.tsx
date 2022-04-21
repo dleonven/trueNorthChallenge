@@ -1,14 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button} from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, Text, View, Pressable} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { item, appScreens } from '../globalTypes'
+import globalStyles from '../globalStyles'
+import { Context } from './Context'
+import MainDetail from './MainDetail'
+
 /**
  * 💯 Handle loading and error scenarios, always
 */
 
+const numberFormatter = new Intl.NumberFormat('en-US', {
+    style: 'decimal',
+    minimumFractionDigits: 0,
+});
+
 export default function ListScreen({ route }) {
     const navigation = useNavigation<appScreens>()
+    const { amountFormatter } = useContext(Context)
 
     const { id } = route.params
 
@@ -30,50 +40,63 @@ export default function ListScreen({ route }) {
 
     const onPress = () => navigation.navigate('Wallet')
 
+    if(!item) return <Text>Loading</Text>
     return (
         <View style={styles.container}>
-            {item ?
-                <View>
-                    <Text>itemId: {JSON.stringify(id)}</Text>
-                    <Text>#{item.rank}</Text>
-                    <Text>{item.symbol}</Text>
-                    <Text>{item.name}</Text>
-                    <Text>USD {item.priceUsd}</Text>
-                    <Text>Last24 {item.changePercent24Hr}</Text>
-                    <Text>Supply {item.supply}</Text>
-                    <Text>Max Supply {item.maxSupply}</Text>
-                    <Text>Market Cap Usd {item.marketCapUsd}</Text>
+            <View style={globalStyles.itemContainer}>
+                
+                <MainDetail item={item}/>
 
-                    <Button title="My Wallet" onPress={onPress} />
+                <View style={{marginTop: 16}}/>
+
+                <View style={styles.textContainer}>
+                    <Text style={styles.text}>Supply</Text>
+                    <Text style={styles.amount}>{numberFormatter.format(parseFloat(item.supply))}</Text>
                 </View>
-                : 
-                <Text>Loading</Text>
-            }
+
+                {item.maxSupply &&
+                    <View style={styles.textContainer}>
+                        <Text style={styles.text}>Max Supply</Text>
+                        <Text style={styles.amount}>{numberFormatter.format(parseFloat(item.maxSupply))}</Text>
+                    </View>
+                }
+
+
+                <View style={styles.textContainer}>
+                    <Text style={styles.text}>Market Cap</Text>
+                    <Text style={styles.amount}>{amountFormatter.format(parseFloat(item.marketCapUsd))}</Text>
+                </View>
+
+            </View>
+
+
+
+            <Pressable onPress={onPress} style={({ pressed }) => ([globalStyles.button, pressed && { opacity: 0.6 }])}>
+                <Text style={globalStyles.buttonText}>My Wallet</Text>
+            </Pressable>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        paddingLeft: 30,
+        paddingRight: 30,
+        marginTop: 24
+    },
+    textContainer: {
+        flexDirection: 'row',
+        marginBottom: 10
+    },  
+    text: {
+        fontFamily: 'Inter-Medium',
+        fontSize: 14,
+        marginRight: 8
+    },
+    amount: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14
+    }
 });
-
-const mockData = {
-  data: {
-    id: 'bitcoin',
-    rank: '1',
-    symbol: 'BTC',
-    name: 'Bitcoin',
-    supply: '17193925.0000000000000000',
-    maxSupply: '21000000.0000000000000000',
-    marketCapUsd: '119179791817.6740161068269075',
-    volumeUsd24Hr: '2928356777.6066665425687196',
-    priceUsd: '6931.5058555666618359',
-    changePercent24Hr: '-0.8101417214350335',
-    vwap24Hr: '7175.0663247679233209',
-  },
-};

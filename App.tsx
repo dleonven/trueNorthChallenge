@@ -12,13 +12,17 @@ import { stackScreenList } from './globalTypes'
 import { Context } from './screens/Context'
 const Stack = createStackNavigator<stackScreenList>();
 
-
+const amountFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+});
 
 function App() {
 
     const [name, setName] = useState<string>('')
 
-    const valueForContext = { name, setName }
+    const valueForContext = { name, setName, amountFormatter }
 
     return (
         <Context.Provider value={valueForContext}>

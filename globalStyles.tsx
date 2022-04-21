@@ -32,5 +32,17 @@ export default StyleSheet.create({
         color: '#FFFFFF',
         fontFamily: 'Inter-Medium',
         fontSize: 16
-    }
+    },
+
+
+    itemContainer: {
+        width: '100%',
+        paddingLeft: 16,
+        paddingRight: 18,
+        paddingTop: 20,
+        paddingBottom: 18,
+        backgroundColor: '#fff',
+        marginBottom: 20,
+        borderRadius: 8
+    },
 });

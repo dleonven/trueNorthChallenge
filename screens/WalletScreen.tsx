@@ -16,8 +16,20 @@ const Tab = createBottomTabNavigator();
 export default function WalletScreen() {
     return (
         <Tab.Navigator>
-            <Tab.Screen name="Account" component={AccountSection} />
-            <Tab.Screen name="Partners" component={PartnersSection} />
+            <Tab.Screen 
+                name="Account" 
+                component={AccountSection} 
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Tab.Screen 
+                name="Partners" 
+                component={PartnersSection} 
+                options={{
+                    headerShown: false
+                }}
+            />
         </Tab.Navigator>
     );
 }
@@ -31,10 +43,22 @@ function AccountSection() {
         <View style={styles.container}>
             <Image style={styles.illustration} source={require('../assets/finish-illustration.png')} />
             <Text style={styles.title}>Hello, {name}</Text>
-            <Text>Glad you are here,</Text>
-            <Text>hope to see you soon.</Text>
+            <Text style={styles.info}>Glad you are here, hope to see you soon.</Text>
         </View>
     );
+}
+
+
+
+
+
+
+type appItem = {
+    item: {
+        name: string,
+        url: string,
+        comments: string,
+    }
 }
 
 function PartnersSection() {
@@ -44,21 +68,29 @@ function PartnersSection() {
         { name: 'App3', url: '#', comments: 'Description of the application and what you did.' },
     ];
 
-    const ListItem = ({ item }) => {
+    const ListItem = ({ item }: appItem) => {
         return (
             <View style={styles.itemContainer}>
-                <Text>{item.name}</Text>
-                <Text>{item.comments}</Text>
-                <Text>URL: {item.url}</Text>
+                <Text style={styles.appName}>{item.name}</Text>
+                <View style={{marginTop: 12}}/>
+                <Text style={styles.appInfo}>{item.comments}</Text>
+                <View style={{marginTop: 24}}/>
+                <View style={styles.urlContainer}>
+                    <Text style={styles.appInfo}>URL: </Text>
+                    <Text style={styles.url}>{item.url}</Text>
+                </View>
             </View>
         );
     };
 
     return (
         <View style={styles.container}>
+            <View style={{marginTop: 24}}/>
             <Text style={styles.title}>Partners</Text>
-            <Text>Some apps I was involved:</Text>
-            
+            <View style={{marginTop: 24}}/>
+            <Text style={styles.subtitle}>Some apps I was involved:</Text>
+            <View style={{marginTop: 18}}/>
+
             {partnerList && partnerList.length > 0 ?
                 <ScrollView>
                     {partnerList.map((item) => (
@@ -73,24 +105,49 @@ function PartnersSection() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 12,
-  },
-  illustration: {
-    width: 256,
-    height: 160,
-  },
-  itemContainer: {
-    display: 'flex',
-    backgroundColor: '#fff',
-    marginVertical: 6,
-    padding: 8,
-  },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    title: {
+        fontSize: 24,
+        fontFamily: 'Inter-Bold',
+    },
+    subtitle: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 16,
+    },
+    info: {
+        fontSize: 14,
+        fontFamily: 'Inter-Regular',
+    },
+    illustration: {
+        width: 256,
+        height: 160,
+    },
+    itemContainer: {
+        display: 'flex',
+        backgroundColor: '#fff',
+        marginVertical: 6,
+        padding: 20,
+        borderRadius: 8
+    },
+    appName: {
+        color: '#019FB5',
+        fontFamily: 'Inter-Bold',
+        fontSize: 16
+    },
+    appInfo: {
+        fontSize: 16,
+        fontFamily: 'Inter-Regular'
+    },
+    urlContainer: {
+        flexDirection: 'row'
+    },
+    url: {
+        color: '#6B7280',
+        fontSize: 16,
+        fontFamily: 'Inter-Regular'
+    }
 });

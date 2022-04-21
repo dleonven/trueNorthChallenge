@@ -1,22 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  TouchableWithoutFeedback,
+  Pressable,
   ScrollView,
 } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { item, appScreens } from '../globalTypes'
-import globalstyles from "../globalStyles"
+import { Context } from './Context'
+import MainDetail from './MainDetail'
 
 
-const amountFormatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 0,
-});
 
 /*
  * 💯 Handle loading and error scenarios, always
@@ -26,6 +22,9 @@ export default function ListScreen() {
     const navigation = useNavigation<appScreens>()
 
     const [data, setData] = useState([])
+
+    const { amountFormatter } = useContext(Context)
+
 
     useEffect(() => {
         const getData = async () => {
@@ -51,38 +50,18 @@ export default function ListScreen() {
     const ListItem = (props: {item: item}) => {
         return (
             <View style={styles.itemContainer}>
-                <TouchableWithoutFeedback onPress={() => onPressItem(props.item)}>
-                    <View>
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <View style={styles.cryptoContainer}>
-                                <Text style={styles.ticker}>{props.item?.symbol}</Text>
-                                <Text> - </Text>
-                                <Text>{props.item?.name}</Text>
-                            </View>
-
-                            <Text>#{props.item?.rank}</Text>
-                        </View>
-
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <View style={{flexDirection: 'row'}}>
-                                <Text style={styles.price}>{amountFormatter.format(parseFloat(props.item?.priceUsd))}</Text>
-                                <Text style={styles.currency}> USD</Text>
-                            </View>
-                            
-                            <View style={styles.percentageContainer}>
-                                <Text>{Number(parseFloat(props.item?.changePercent24Hr)/100).toLocaleString(undefined,{style: 'percent', minimumFractionDigits:1})}</Text>
-                            </View>
-                        </View>
-                    </View>
-                </TouchableWithoutFeedback>
+                <Pressable onPress={() => onPressItem(props.item)}>
+                    <MainDetail item={props.item}/>
+                </Pressable>
             </View>
         );
     };
 
     return (
-        <>
+        <View>
             {data && data.length > 0 ?
-                <ScrollView>
+                <ScrollView style={styles.container}>
+                    <View style={{marginTop: 24}}/>
                     {data.map((item: item) => (
                         <ListItem 
                             key={item?.id} 
@@ -93,21 +72,24 @@ export default function ListScreen() {
                 : 
                 <Text>Loading</Text>
             }
-        </>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        paddingLeft: 30,
+        paddingRight: 30
     },
     itemContainer: {
         width: '100%',
         paddingLeft: 16,
-        padingRight: 18,
+        paddingRight: 18,
         paddingTop: 20,
         paddingBottom: 18,
         backgroundColor: '#fff',
+        marginBottom: 20,
+        borderRadius: 8
     },
     cryptoContainer: {
         flexDirection: 'row', 
@@ -124,7 +106,16 @@ const styles = StyleSheet.create({
     rank: {
         fontFamily: 'Inter-Medium',
         fontSize: 14,
-        color: '#6B7280'   
+        color: '#6B7280',
+        paddingRight: 12
+    },
+    pricePercContainer: {
+        flexDirection: 'row', 
+        justifyContent: 'space-between'
+    },
+    priceContainer: {
+        flexDirection: 'row', 
+        alignItems: 'flex-end'
     },
     price: {
         fontFamily: 'Inter-SemiBold',
@@ -142,6 +133,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 12,
         width: 73
+    },
+    percentageText: {
+        fontFamily: 'Inter-Medium',
+        fontSize: 14
+    },
+    cryptoRankContainer: {
+        flexDirection: 'row', 
+        justifyContent: 'space-between'
     }
 });
 
