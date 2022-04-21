@@ -20,14 +20,27 @@ export default function WalletScreen() {
                 name="Account" 
                 component={AccountSection} 
                 options={{
-                    headerShown: false
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => (
+                        <View style={[styles.tabBarContainer, focused && {borderTopColor: '#1FC4DB',}]}>
+                            <Text style={[styles.tabBarText, focused && {color: '#1FC4DB'}]}>Account</Text>
+                        </View>
+                                
+                    ),
+                    tabBarShowLabel: false
                 }}
             />
             <Tab.Screen 
                 name="Partners" 
                 component={PartnersSection} 
                 options={{
-                    headerShown: false
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => (
+                        <View style={[styles.tabBarContainer, focused && {borderTopColor: '#1FC4DB',}]}>
+                            <Text style={[styles.tabBarText, focused && {color: '#1FC4DB'}]}>Partners</Text>
+                        </View>      
+                    ),
+                    tabBarShowLabel: false
                 }}
             />
         </Tab.Navigator>
@@ -107,6 +120,7 @@ function PartnersSection() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -149,5 +163,18 @@ const styles = StyleSheet.create({
         color: '#6B7280',
         fontSize: 16,
         fontFamily: 'Inter-Regular'
+    },
+    tabBarContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '80%', 
+        height: '100%', 
+        borderTopColor: '#fff',
+        borderTopWidth: 3
+    },
+    tabBarText: {
+        fontFamily: 'Inter-Bold',
+        fontSize: 16,
+        color: 'black'
     }
 });
