@@ -5,11 +5,7 @@ import { appScreens } from '../globalTypes'
 import { Context } from './Context'
 import globalStyles from "../globalStyles"
 
-/*
-  Implement form using any user/pass combination
-  Store data using React context
-  💯 Handling Sensitive Info and Secure Storage is a great plus
-*/
+
 export default function HomeScreen() {
 
     const { name, setName } = useContext(Context)

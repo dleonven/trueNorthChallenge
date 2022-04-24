@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,22 +9,15 @@ import {
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { item, appScreens } from '../globalTypes'
-import { Context } from './Context'
 import MainDetail from './MainDetail'
 
-
-
-/*
- * 💯 Handle loading and error scenarios, always
- */
 
 export default function ListScreen() {
     const navigation = useNavigation<appScreens>()
 
     const [data, setData] = useState([])
-
-    const { amountFormatter } = useContext(Context)
-
+    const [loading, setLoading] = useState<boolean>(true)
+    const [error, setError] = useState<string>('')
 
     useEffect(() => {
         const getData = async () => {
@@ -33,7 +26,10 @@ export default function ListScreen() {
                 setData(response.data.data)
             } 
             catch (error) {
-                console.log('error: ', error)
+                setError(error)
+            }
+            finally {
+                setLoading(false)
             }
         }
         getData()
@@ -57,9 +53,11 @@ export default function ListScreen() {
         );
     };
 
-    return (
+    if(loading) return <Text>Loading</Text>
+    if(error || !data) return <Text>Error</Text>
+    return(
         <View>
-            {data && data.length > 0 ?
+            {data.length > 0 &&
                 <ScrollView style={styles.container}>
                     <View style={{marginTop: 24}}/>
                     {data.map((item: item) => (
@@ -69,8 +67,6 @@ export default function ListScreen() {
                         />
                     ))}
                 </ScrollView>
-                : 
-                <Text>Loading</Text>
             }
         </View>
     );

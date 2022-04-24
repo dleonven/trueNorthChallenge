@@ -10,6 +10,7 @@ import WalletScreen from './screens/WalletScreen';
 import Logo from './components/ui/Logo'
 import { stackScreenList } from './globalTypes'
 import { Context } from './screens/Context'
+
 const Stack = createStackNavigator<stackScreenList>();
 
 const amountFormatter = new Intl.NumberFormat('en-US', {
@@ -27,16 +28,19 @@ function App() {
     return (
         <Context.Provider value={valueForContext}>
             <NavigationContainer>
-                <Stack.Navigator>
+                <Stack.Navigator
+                    screenOptions={{
+                        headerTitleStyle: {
+                            fontFamily: 'Inter-SemiBold',
+                            fontSize: 16,
+                        },     
+                    }}
+                >
                     <Stack.Screen 
                         name="ToDo" 
                         component={ToDoScreen} 
                         options={{
                             title: 'To Do',
-                            headerTitleStyle: {
-                                fontFamily: 'Inter-SemiBold',
-                                fontSize: 16
-                            },
                         }}
                     />
                     <Stack.Screen 

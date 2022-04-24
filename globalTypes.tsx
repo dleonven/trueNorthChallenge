@@ -20,7 +20,7 @@ export type stackScreenList = {
     ToDo:   undefined;
     Home:   undefined;
     List:   undefined;
-    Detail: any;
+    Detail: { id: string | undefined };
     Wallet: undefined;
 };
 

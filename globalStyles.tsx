@@ -33,8 +33,6 @@ export default StyleSheet.create({
         fontFamily: 'Inter-Medium',
         fontSize: 16
     },
-
-
     itemContainer: {
         width: '100%',
         paddingLeft: 16,

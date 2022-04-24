@@ -7,22 +7,28 @@ import globalStyles from '../globalStyles'
 import { Context } from './Context'
 import MainDetail from './MainDetail'
 
-/**
- * 💯 Handle loading and error scenarios, always
-*/
-
 const numberFormatter = new Intl.NumberFormat('en-US', {
     style: 'decimal',
     minimumFractionDigits: 0,
 });
 
-export default function ListScreen({ route }) {
+interface IdetailScreen {
+    route: { 
+        params: { 
+            id: string 
+        }
+    }
+}
+
+export default function DetailScreen({ route }: IdetailScreen) {
     const navigation = useNavigation<appScreens>()
     const { amountFormatter } = useContext(Context)
 
     const { id } = route.params
 
     const [item, setItem] = useState<item>(null)
+    const [loading, setLoading] = useState<boolean>(true)
+    const [error, setError] = useState<string>('')
 
     useEffect(() => {
         const getData = async () => {
@@ -31,7 +37,10 @@ export default function ListScreen({ route }) {
                 setItem(response.data.data)
             } 
             catch (error) {
-                console.log('error: ', error)
+                setError(error)
+            }
+            finally {
+                setLoading(false)
             }
         }
 
@@ -40,8 +49,9 @@ export default function ListScreen({ route }) {
 
     const onPress = () => navigation.navigate('Wallet')
 
-    if(!item) return <Text>Loading</Text>
-    return (
+    if(loading) return <Text>Loading</Text>
+    if(error || !item) return <Text>Error</Text>
+    return(
         <View style={styles.container}>
             <View style={globalStyles.itemContainer}>
                 
@@ -61,15 +71,12 @@ export default function ListScreen({ route }) {
                     </View>
                 }
 
-
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>Market Cap</Text>
                     <Text style={styles.amount}>{amountFormatter.format(parseFloat(item.marketCapUsd))}</Text>
                 </View>
 
             </View>
-
-
 
             <Pressable onPress={onPress} style={({ pressed }) => ([globalStyles.button, pressed && { opacity: 0.6 }])}>
                 <Text style={globalStyles.buttonText}>My Wallet</Text>

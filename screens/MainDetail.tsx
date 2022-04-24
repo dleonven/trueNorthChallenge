@@ -1,8 +1,7 @@
-
-
 import React, { useContext } from 'react';
-import { StyleSheet, Text, View, Pressable} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Context } from './Context'
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function MainDetail(props: { item: any }) {
 
@@ -31,6 +30,11 @@ export default function MainDetail(props: { item: any }) {
                 </View>
                 
                 <View style={[styles.percentageContainer, percentageNegative ? {backgroundColor: '#FDDCDC'} : {backgroundColor: '#D1FAE5'}]}>
+                    {percentageNegative ? 
+                        <Icon name="arrow-down" size={18} color="#A50606" />   
+                        :
+                        <Icon name="arrow-up" size={18} color="#065F46" />
+                    }
                     <Text style={[styles.percentageText, percentageNegative ? {color: '#A50606'} : {color: '#065F46'}]}>{Number(parseFloat(props.item?.changePercent24Hr)/100).toLocaleString(undefined,{style: 'percent', minimumFractionDigits:1})}</Text>
                 </View>
             </View>
@@ -95,7 +99,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 12,
-        width: 73
+        //width: 73,
+        flexDirection: 'row',
+        paddingLeft: 15,
+        paddingRight: 10
     },
     percentageText: {
         fontFamily: 'Inter-Medium',
